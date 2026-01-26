@@ -12,7 +12,7 @@
 * **Cloud Infrastructure:**
     * **Amazon S3:** Highly durable object storage for static web assets.
     * **Amazon CloudFront:** Global Content Delivery Network (CDN) for low-latency delivery and HTTPS.
-    * **Infrastructure as Code (IaC):** Defined cloud resources using Terraform for repeatability.
+    * **Infrastructure as Code (IaC):** Defined cloud resources using shell scripting for repeatability.
     * **Automation:** Bash scripting for CI/CD synchronization and cache management.
 
 ## 🏗 Cloud Architecture & Security
