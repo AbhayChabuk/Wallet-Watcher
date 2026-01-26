@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# =================================================================
+# [TEMPLATE] Wallet Watcher Deployment Script
+# Purpose: Automates S3 Sync and CloudFront Cache Invalidation
+# Note: Rename this to 'deploy.sh' and fill in variables to use.
+# =================================================================
+
+# --- CONFIGURATION (Fill these in with your AWS details) ---
+BUCKET_NAME="YOUR_S3_BUCKET_NAME_HERE"
+DISTRIBUTION_ID="YOUR_CLOUDFRONT_DISTRIBUTION_ID_HERE"
+REGION="us-east-1" 
+
+echo "----------------------------------------------------"
+echo "🚀 Starting Deployment for Wallet Watcher..."
+echo "----------------------------------------------------"
+
+# 1. Sync Files to S3
+# 'sync' is used to upload only changed files.
+# '--delete' ensures S3 matches the local folder exactly.
+echo "📦 Step 1: Syncing assets to S3..."
+aws s3 sync . s3://$BUCKET_NAME \
+    --delete \
+    --exclude ".git/*" \
+    --exclude ".gitignore" \
+    --exclude "*.template" \
+    --exclude "README.md" \
+    --region $REGION
+
+# 2. CloudFront Cache Invalidation
+# This 'clears' the global cache so users see the latest update.
+echo "🧹 Step 2: Invalidating CloudFront cache..."
+aws cloudfront create-invalidation \
+    --distribution-id $DISTRIBUTION_ID \
+    --paths "/*" \
+    --region $REGION
+
+echo "----------------------------------------------------"
+echo "✅ Deployment Complete!"
+echo "----------------------------------------------------"
