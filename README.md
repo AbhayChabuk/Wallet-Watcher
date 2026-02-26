@@ -4,9 +4,6 @@
 
 **Wallet Watcher** is a responsive personal finance application designed for real-time tracking of income and expenses. This project demonstrates a professional deployment lifecycle—from frontend development to **Automated Cloud Infrastructure**.
 
-## 🚀 Live Demo
-**[https://d1of28ws8nlcdd.cloudfront.net](https://d1of28ws8nlcdd.cloudfront.net)**
-
 ## 🛠 Tech Stack
 * **Frontend:** HTML5, CSS3 (Dark Theme), Vanilla JavaScript (ES6+).
 * **Cloud Infrastructure:**
