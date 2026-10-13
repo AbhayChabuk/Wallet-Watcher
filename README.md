@@ -110,7 +110,9 @@ This approach helps reduce reliance on manual setup and provides a foundation fo
 ## 🏗️ System Architecture
 
 <p align="center">
-  <img src="S3%2BCloudFront_Architecture.png" alt="Wallet Watcher AWS Architecture Diagram" width="100%">
+  <img src="Wallet%20Watcher%20AWS%20Architecture%20Diagram.png"
+       alt="Wallet Watcher AWS Architecture Diagram"
+       width="100%">
 </p>
 
 ### Architecture Components
