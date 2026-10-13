@@ -7,7 +7,7 @@
 <h3 align="center">Cloud-Native Expense Tracker | AWS Static Website Hosting</h3>
 
 <p align="center">
-  A personal finance application demonstrating secure AWS hosting,
+  A responsive personal finance application demonstrating secure AWS hosting,
   content delivery, and automated deployment.
 </p>
 
@@ -21,13 +21,13 @@
 
 ---
 
-## 📌 Project Overview
+## 📌 1. Project Overview
 
 **Wallet Watcher** is a responsive personal finance application designed to help users track income, expenses, and their overall balance through an interactive interface.
 
-Beyond frontend development, this project demonstrates how a static web application can be hosted on AWS using **Amazon S3 and Amazon CloudFront**, with an emphasis on secure origin access, efficient content delivery, and automated deployment operations.
+The project goes beyond frontend development by demonstrating how a static web application can be hosted on AWS using **Amazon S3 and Amazon CloudFront**, with an emphasis on secure origin access, efficient content delivery, and automated deployment operations.
 
-The application uses HTML, CSS, and JavaScript for its frontend functionality, while browser `localStorage` provides client-side data persistence.
+The application uses HTML5, CSS3, and Vanilla JavaScript for its frontend functionality, while browser `localStorage` provides client-side data persistence.
 
 The cloud infrastructure is designed to keep the S3 bucket private and deliver application content through CloudFront. Bash scripting and AWS CLI commands simplify the process of synchronizing website files and invalidating cached content after updates.
 
@@ -37,13 +37,61 @@ The cloud infrastructure is designed to keep the S3 bucket private and deliver a
 - **Global Content Delivery:** Uses Amazon CloudFront to cache and distribute static content.
 - **Restricted Origin Access:** Uses Origin Access Control (OAC) to authorize CloudFront access to the private S3 origin.
 - **Automated Deployment Operations:** Uses Bash scripting and AWS CLI commands to synchronize files and invalidate CloudFront cache.
-- **Repeatable Infrastructure Configuration:** Applies Infrastructure as Code principles to reduce repetitive manual configuration.
+- **Infrastructure as Code Principles:** Uses programmatic configuration to make infrastructure setup more repeatable.
 - **Client-Side Data Persistence:** Uses browser `localStorage` to retain application data locally.
 - **Responsive Interface:** Provides a dark-themed interface designed for desktop and mobile devices.
 
 ---
 
-## 🎯 Problem Statement
+## 🏗️ 2. AWS Architecture
+
+<p align="center">
+  <img
+    src="Wallet%20Watcher%20AWS%20Architecture%20Diagram.png"
+    alt="Wallet Watcher AWS Architecture Diagram"
+    width="100%"
+  >
+</p>
+
+### Architecture Overview
+
+The application uses Amazon S3 for static asset storage and Amazon CloudFront as the content delivery layer.
+
+The S3 bucket remains private, while CloudFront accesses the origin through Origin Access Control. Users access the application through the configured CloudFront distribution rather than directly accessing the S3 bucket.
+
+### Architecture Components
+
+| Component | Responsibility |
+|---|---|
+| Client Devices | Access the application through a web browser. |
+| Internet | Provides connectivity between users and the application delivery endpoint. |
+| Amazon CloudFront | Delivers static content over HTTPS and caches eligible assets at edge locations. |
+| Origin Access Control (OAC) | Allows the configured CloudFront distribution to access the private S3 origin. |
+| Amazon S3 | Stores static website assets, including HTML, CSS, and JavaScript files. |
+| GitHub | Hosts the source code and provides version control. |
+| AWS CLI | Executes AWS deployment and cache-management operations. |
+| Bash Deployment Script | Automates the deployment operations defined in the script. |
+
+### Request Flow
+
+1. **User Request:** A user accesses the application through its configured CloudFront distribution domain or associated custom domain.
+2. **CloudFront Receives the Request:** The request reaches Amazon CloudFront.
+3. **Cache Evaluation:** CloudFront checks whether the requested content can be served from its cache.
+4. **Origin Request:** If the content needs to be retrieved from the origin, CloudFront accesses the private S3 bucket through the configured OAC and bucket policy.
+5. **Content Delivery:** CloudFront returns the requested content to the user and caches eligible responses according to the configured cache behavior.
+
+### Security Design
+
+- **Private S3 Bucket:** Public access is blocked, preventing anonymous users from directly retrieving website assets from the bucket.
+- **Origin Access Control:** The S3 bucket policy authorizes the intended CloudFront distribution to access the origin.
+- **HTTPS Delivery:** CloudFront supports secure content delivery when the distribution, certificate, and domain settings are configured correctly.
+- **Controlled Origin Access:** Users access the application through its intended delivery endpoint instead of bypassing CloudFront to retrieve files directly from S3.
+
+> **Security note:** OAC must be configured together with an appropriate S3 bucket policy and CloudFront origin settings. HTTPS delivery also depends on the distribution and certificate configuration. Verify these controls against the deployed AWS environment.
+
+---
+
+## 🎯 3. Problem Statement
 
 Deploying a web application involves more than developing a functional user interface. The application must also be hosted appropriately, delivered efficiently, protected against unnecessary exposure, and updated through a maintainable deployment process.
 
@@ -69,19 +117,19 @@ Design and implement an AWS-hosted static application that addresses these chall
 
 ---
 
-## 💡 Solution Approach
+## 💡 4. Solution Approach
 
 Wallet Watcher combines a lightweight frontend with AWS-managed storage and content delivery services.
 
 The solution focuses on four areas.
 
-### 1. Secure Static Website Hosting
+### 4.1 Secure Static Website Hosting
 
 Amazon S3 stores the application's HTML, CSS, JavaScript, and other static assets.
 
 The bucket is configured for private access rather than serving website files directly to anonymous users. CloudFront accesses the origin through Origin Access Control, subject to the configured S3 bucket policy.
 
-### 2. Efficient Content Delivery
+### 4.2 Efficient Content Delivery
 
 Amazon CloudFront acts as the application's content delivery layer.
 
@@ -89,7 +137,7 @@ It caches eligible static assets at edge locations and serves cached responses t
 
 This reduces repeated origin requests and helps improve content delivery performance.
 
-### 3. Automated Deployment Operations
+### 4.3 Automated Deployment Operations
 
 A Bash deployment template uses AWS CLI commands to automate important deployment tasks.
 
@@ -99,7 +147,7 @@ The workflow includes:
 - Requesting CloudFront cache invalidation after updates.
 - Reducing repetitive manual deployment steps.
 
-### 4. Repeatable Infrastructure Configuration
+### 4.4 Repeatable Infrastructure Configuration
 
 Infrastructure-related configuration and deployment operations are handled programmatically where applicable.
 
@@ -107,67 +155,7 @@ This approach helps reduce reliance on manual setup and provides a foundation fo
 
 ---
 
-## 🏗️ System Architecture
-
-<p align="center">
-  <img src="Wallet%20Watcher%20AWS%20Architecture%20Diagram.png"
-       alt="Wallet Watcher AWS Architecture Diagram"
-       width="100%">
-</p>
-
-### Architecture Components
-
-| Component | Responsibility |
-|---|---|
-| Client Devices | Access the application through a web browser. |
-| Internet | Provides connectivity between users and the application delivery endpoint. |
-| Amazon CloudFront | Delivers static content over HTTPS and caches eligible assets at edge locations. |
-| Origin Access Control (OAC) | Allows the configured CloudFront distribution to access the private S3 origin. |
-| Amazon S3 | Stores static website assets, including HTML, CSS, and JavaScript files. |
-| GitHub | Hosts the source code and provides version control. |
-| AWS CLI | Executes AWS operations required for deployment and cache invalidation. |
-| Bash Deployment Script | Automates the deployment operations defined in the script. |
-
-### Request Flow
-
-The application follows this request flow:
-
-**Step 1: User Request**
-
-A user opens the application through its configured CloudFront distribution domain or associated custom domain.
-
-**Step 2: CloudFront Receives the Request**
-
-The request reaches Amazon CloudFront, which handles content delivery over HTTPS when the distribution is configured accordingly.
-
-**Step 3: Cache Evaluation**
-
-CloudFront checks whether the requested asset can be served from its cache.
-
-If an eligible cached response is available, CloudFront serves it without retrieving the asset from S3 for that request.
-
-**Step 4: Fetch from the S3 Origin**
-
-When the requested content needs to be retrieved from the origin, CloudFront accesses the private S3 bucket through the configured Origin Access Control and bucket policy.
-
-**Step 5: Deliver Content**
-
-CloudFront returns the requested content to the user. Eligible responses may also be cached according to the distribution's cache behavior.
-
-### Security Design
-
-The architecture is designed to prevent direct public access to the S3 origin.
-
-- **Private S3 Bucket:** Public access is blocked, and the bucket is not intended to serve files directly to anonymous users.
-- **Origin Access Control:** The bucket policy authorizes the intended CloudFront distribution to access the origin.
-- **HTTPS Delivery:** CloudFront supports secure content delivery when the distribution, certificate, and domain settings are configured correctly.
-- **Controlled Origin Access:** Users access the application through its intended delivery endpoint rather than bypassing CloudFront to retrieve files directly from S3.
-
-> **Security note:** OAC must be configured together with an appropriate S3 bucket policy and CloudFront origin settings. HTTPS delivery also depends on the distribution and certificate configuration. Verify these controls against the deployed AWS environment.
-
----
-
-## 🔄 Automated Deployment Workflow
+## 🔄 5. Automated Deployment Workflow
 
 A key engineering objective of this project is to reduce repetitive deployment operations.
 
@@ -198,9 +186,7 @@ Amazon CloudFront
 Updated Content Delivered to Users
 ```
 
-### Deployment Operations
-
-#### 1. Synchronize Website Files
+### 5.1 Synchronize Website Files
 
 The AWS CLI `s3 sync` command synchronizes files from a local directory to an S3 bucket.
 
@@ -221,9 +207,9 @@ aws s3 sync ./ s3://YOUR_BUCKET_NAME \
 
 Replace `YOUR_BUCKET_NAME` with the target bucket name.
 
-The source directory and exclusion patterns should be adjusted to match the actual project structure.
+Adjust the source directory and exclusion patterns to match the actual project structure.
 
-#### 2. Invalidate CloudFront Cache
+### 5.2 Invalidate CloudFront Cache
 
 After deploying updated files, the following command requests a cache invalidation:
 
@@ -241,7 +227,7 @@ aws cloudfront create-invalidation \
 
 Replace `YOUR_DISTRIBUTION_ID` with the actual distribution ID.
 
-Invalidation is useful when updated content must become available without waiting for the existing cache entries to expire naturally.
+Invalidation is useful when updated content must become available without waiting for existing cache entries to expire naturally.
 
 ### Benefits of Deployment Automation
 
@@ -251,11 +237,11 @@ Invalidation is useful when updated content must become available without waitin
 - Provides a foundation for more advanced CI/CD workflows.
 - Improves maintainability as the application evolves.
 
-> **Implementation note:** The repository contains a deployment template named `deploy.sh.template`. The commands above illustrate its deployment operations. Review the actual template for the complete implementation, configuration requirements, and execution order. A script alone does not imply that every GitHub push automatically triggers deployment; that requires a configured trigger, such as a GitHub Actions workflow.
+> **Implementation note:** The repository contains a deployment template named `deploy.sh.template`. Review the actual template for its complete implementation, configuration requirements, and execution order. A script alone does not imply that every GitHub push automatically triggers deployment; that requires a configured trigger, such as a GitHub Actions workflow.
 
 ---
 
-## 🛠️ Technology Stack
+## 🛠️ 6. Technology Stack
 
 ### Frontend Technologies
 
@@ -263,7 +249,7 @@ Invalidation is useful when updated content must become available without waitin
 |---|---|
 | HTML5 | Defines the application structure. |
 | CSS3 | Implements the responsive layout and dark theme. |
-| Vanilla JavaScript | Handles application interactions, calculations, and client-side logic. |
+| Vanilla JavaScript (ES6+) | Handles application interactions, calculations, and client-side logic. |
 | Browser localStorage | Persists application data locally in the browser. |
 
 ### AWS and Cloud Engineering
@@ -280,7 +266,7 @@ Invalidation is useful when updated content must become available without waitin
 
 ---
 
-## ✨ Application Features
+## ✨ 7. Application Features
 
 ### 💰 Personal Finance Tracking
 
@@ -310,7 +296,7 @@ Benefits include:
 
 ---
 
-## ⚙️ Implementation Details
+## ⚙️ 8. Implementation Details
 
 The project separates the application, hosting, and deployment responsibilities.
 
@@ -342,7 +328,7 @@ The project does not require an application server or remote database for its ex
 
 ---
 
-## 🚀 Local Setup
+## 🚀 9. Local Setup
 
 ### Prerequisites
 
@@ -402,7 +388,7 @@ Before executing the deployment process, verify the target AWS account, bucket n
 
 ---
 
-## 🔐 Security Considerations
+## 🔐 10. Security Considerations
 
 Security is an important part of the hosting architecture.
 
@@ -417,7 +403,7 @@ Security is an important part of the hosting architecture.
 
 ---
 
-## 🧠 Engineering Decisions and Trade-offs
+## 🧠 11. Engineering Decisions and Trade-offs
 
 | Decision | Reasoning | Trade-off |
 |---|---|---|
@@ -431,29 +417,27 @@ Security is an important part of the hosting architecture.
 
 ---
 
-## 📈 Future Improvements
+## 📈 12. Future Improvements
 
 The project provides a foundation for exploring additional cloud engineering practices.
 
-Potential improvements include:
-
-### 1. GitHub Actions CI/CD
+### 12.1 GitHub Actions CI/CD
 
 Configure a GitHub Actions workflow to validate changes and deploy approved updates automatically.
 
 This would extend the existing scripted deployment process with a defined trigger and automated execution.
 
-### 2. Terraform Infrastructure as Code
+### 12.2 Terraform Infrastructure as Code
 
 Define the S3 bucket, CloudFront distribution, OAC, and supporting configuration using Terraform.
 
 This would make infrastructure provisioning more declarative, reviewable, and repeatable.
 
-### 3. Custom Domain Configuration
+### 12.3 Custom Domain Configuration
 
 Associate a custom domain with the CloudFront distribution and configure the appropriate DNS and HTTPS certificate settings.
 
-### 4. Automated Validation and Error Handling
+### 12.4 Automated Validation and Error Handling
 
 Extend the deployment script with:
 
@@ -462,23 +446,23 @@ Extend the deployment script with:
 - Error handling and logging.
 - Safer deployment failure handling.
 
-### 5. Cloud Monitoring
+### 12.5 Cloud Monitoring
 
 Explore CloudFront access logs, CloudWatch metrics, and relevant alarms to understand application delivery and infrastructure behavior.
 
-### 6. Cost Optimization
+### 12.6 Cost Optimization
 
 Review S3 storage, CloudFront usage, data transfer, and invalidation patterns to identify opportunities for reducing unnecessary costs.
 
-### 7. Backend Integration
+### 12.7 Backend Integration
 
 Introduce authenticated server-side storage if cross-device synchronization, centralized financial records, or additional security requirements become necessary.
 
-These improvements represent possible extensions rather than functionality already implemented.
+> These improvements represent potential extensions rather than functionality already implemented.
 
 ---
 
-## 🎓 Key Learnings
+## 🎓 13. Key Learnings
 
 This project provided practical exposure to the relationship between frontend development and AWS cloud infrastructure.
 
@@ -495,7 +479,7 @@ Key learning areas include:
 
 ---
 
-## 📋 Project Summary
+## 📋 14. Project Summary
 
 Wallet Watcher demonstrates how a lightweight personal finance application can be hosted on AWS using a private S3 bucket and Amazon CloudFront.
 
